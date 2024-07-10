@@ -64,7 +64,17 @@ const Home = () => {
   };
 
   // console.log("check listbook", listBook);
-  const onFinish = (values) => {};
+  const onFinish = (values) => {
+    console.log("check value", values);
+    if (values?.range?.from >= 0 && values?.range?.to >= 0) {
+      let f = `price>=${values?.range?.from}&price<=${values?.range?.to}`;
+      if (values?.category?.length) {
+        const cate = values?.category?.join(",");
+        f += `&category=${cate}`;
+      }
+      setFilter(f);
+    }
+  };
 
   const items = [
     {
@@ -104,6 +114,15 @@ const Home = () => {
   };
   const handleChangeFilter = (changedValues, values) => {
     console.log(">>> check handleChangeFilter", changedValues, values);
+    if (changedValues.category) {
+      const cate = values.category;
+      if (cate && cate.length > 0) {
+        const p = cate.join(",");
+        setFilter(`category=${p}`);
+      } else {
+        setFilter("");
+      }
+    }
   };
 
   return (
@@ -113,7 +132,7 @@ const Home = () => {
         style={{ maxWidth: 1440, margin: "0 auto" }}
       >
         <Row gutter={[[20, 20]]}>
-          <Col md={4} sm={0} xs={0} style={{ border: "1px solid green" }}>
+          <Col md={4} sm={0} xs={0}>
             <div
               style={{
                 display: "flex",
@@ -245,12 +264,18 @@ const Home = () => {
               </Form.Item>
             </Form>
           </Col>
-          <Col md={20} xs={24} style={{ border: "1px solid red" }}>
+          <Col md={20} xs={24}>
             <div
               style={{ padding: "20px", background: "#fff", borderRadius: 5 }}
             >
               <Row>
-                <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+                <Tabs
+                  defaultActiveKey="1"
+                  items={items}
+                  onChange={(value) => {
+                    setSortQuery(value);
+                  }}
+                />
               </Row>
               <Row className="customize-row">
                 {listBook.map((item, index) => (
