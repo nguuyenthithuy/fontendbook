@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row, Table } from "antd";
+import {
+  Button,
+  Col,
+  message,
+  notification,
+  Popconfirm,
+  Row,
+  Table,
+} from "antd";
 import InputSearch from "./InputSearch";
 import { render } from "react-dom";
-import { callListBook, callListUser } from "../../../services/api";
+import {
+  callDeleteBook,
+  callListBook,
+  callListUser,
+} from "../../../services/api";
 import UserViewDetail from "./BookViewDetail";
 import {
   CloudUploadOutlined,
@@ -112,7 +124,19 @@ const BookTable = () => {
       render: (text, record, index) => {
         return (
           <>
-            <button>Delete</button>
+            <Popconfirm
+              placement="leftTop"
+              title={"Xác nhận xóa book"}
+              description={"Bạn có chắc chắn muốn xóa book này ?"}
+              onConfirm={() => handleDeleteBook(record._id)}
+              okText="Xác nhận"
+              cancelText="Hủy"
+            >
+              <span style={{ cursor: "pointer", margin: "0 20px" }}>
+                <DeleteTwoTone twoToneColor="#ff4d4f" />
+              </span>
+            </Popconfirm>
+
             <button
               style={{ marginLeft: "20px" }}
               onClick={() => {
@@ -127,6 +151,19 @@ const BookTable = () => {
       },
     },
   ];
+
+  const handleDeleteBook = async (_id) => {
+    const res = await callDeleteBook(_id);
+    if (res && res.data) {
+      message.success("Xóa book thành công");
+      fetchBook();
+    } else {
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description: res.message,
+      });
+    }
+  };
 
   const onChange = (pagination, filters, sorter, extra) => {
     if (pagination && pagination.current !== current) {

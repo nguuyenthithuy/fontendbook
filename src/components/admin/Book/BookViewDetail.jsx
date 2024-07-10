@@ -13,7 +13,6 @@ const BookViewDetail = (props) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
- 
 
   const onClose = () => {
     setOpenViewDetail(false);
@@ -97,6 +96,12 @@ const BookViewDetail = (props) => {
           </Descriptions.Item>
           <Descriptions.Item label="Giá tiền">
             {dataViewDetail?.price}
+          </Descriptions.Item>
+          <Descriptions.Item label="Số lượng">
+            {dataViewDetail?.quantity}
+          </Descriptions.Item>
+          <Descriptions.Item label="Đã bán">
+            {dataViewDetail?.sold}
           </Descriptions.Item>
           <Descriptions.Item label="Thể loại" span={2}>
             <Badge status="processing" text={dataViewDetail?.category} />
